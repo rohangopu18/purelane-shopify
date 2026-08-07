@@ -1,0 +1,486 @@
+<section
+  id="PurelaneHowItWorks-{{ section.id }}"
+  class="purelane-how"
+>
+  <div class="purelane-how__inner page-width">
+
+    <div class="purelane-how__header">
+
+      {% if section.settings.eyebrow != blank %}
+        <p class="purelane-how__eyebrow">
+          {{ section.settings.eyebrow | escape }}
+        </p>
+      {% endif %}
+
+      {% if section.settings.heading != blank %}
+        <h2 class="purelane-how__heading">
+          {{ section.settings.heading }}
+        </h2>
+      {% endif %}
+
+      {% if section.settings.description != blank %}
+        <div class="purelane-how__description">
+          {{ section.settings.description }}
+        </div>
+      {% endif %}
+
+    </div>
+
+
+    <div class="purelane-how__steps">
+
+      {% for block in section.blocks %}
+
+        <article
+          class="purelane-how__step"
+          {{ block.shopify_attributes }}
+        >
+
+          <div class="purelane-how__number">
+            {{ block.settings.number }}
+          </div>
+
+          {% if block.settings.icon != blank %}
+            <div class="purelane-how__icon">
+              {{ block.settings.icon }}
+            </div>
+          {% endif %}
+
+          <h3 class="purelane-how__title">
+            {{ block.settings.title }}
+          </h3>
+
+          {% if block.settings.description != blank %}
+            <div class="purelane-how__text">
+              {{ block.settings.description }}
+            </div>
+          {% endif %}
+
+        </article>
+
+      {% endfor %}
+
+    </div>
+
+
+    {% if section.settings.button_text != blank %}
+
+      <div class="purelane-how__action">
+
+        <a
+          href="{{ section.settings.button_link | default: routes.all_products_collection_url }}"
+          class="purelane-how__button"
+        >
+          {{ section.settings.button_text | escape }}
+          <span aria-hidden="true">→</span>
+        </a>
+
+      </div>
+
+    {% endif %}
+
+  </div>
+</section>
+
+
+<style>
+
+  #PurelaneHowItWorks-{{ section.id }} {
+    background: {{ section.settings.background_color }};
+    color: {{ section.settings.text_color }};
+  }
+
+
+  #PurelaneHowItWorks-{{ section.id }} .purelane-how__inner {
+    padding-top: 8rem;
+    padding-bottom: 8rem;
+  }
+
+
+  /* HEADER */
+
+  #PurelaneHowItWorks-{{ section.id }} .purelane-how__header {
+    max-width: 760px;
+    margin: 0 auto 5rem;
+    text-align: center;
+  }
+
+
+  #PurelaneHowItWorks-{{ section.id }} .purelane-how__eyebrow {
+    margin: 0 0 1.5rem;
+
+    color: {{ section.settings.accent_color }};
+
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    line-height: 1.4;
+
+    text-transform: uppercase;
+  }
+
+
+  #PurelaneHowItWorks-{{ section.id }} .purelane-how__heading {
+    margin: 0;
+
+    font-size: clamp(3.5rem, 5vw, 6rem);
+    line-height: 0.98;
+    letter-spacing: -0.05em;
+    font-weight: 700;
+  }
+
+
+  #PurelaneHowItWorks-{{ section.id }} .purelane-how__description {
+    max-width: 650px;
+
+    margin: 2rem auto 0;
+
+    font-size: 1.7rem;
+    line-height: 1.55;
+
+    opacity: 0.7;
+  }
+
+
+  /* STEPS */
+
+  #PurelaneHowItWorks-{{ section.id }} .purelane-how__steps {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    border-top: 1px solid rgba(0, 0, 0, 0.14);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.14);
+  }
+
+
+  #PurelaneHowItWorks-{{ section.id }} .purelane-how__step {
+    position: relative;
+
+    min-height: 390px;
+
+    padding: 4rem 4rem 4.5rem;
+
+    border-right: 1px solid rgba(0, 0, 0, 0.14);
+  }
+
+
+  #PurelaneHowItWorks-{{ section.id }} .purelane-how__step:last-child {
+    border-right: 0;
+  }
+
+
+  /* NUMBER */
+
+  #PurelaneHowItWorks-{{ section.id }} .purelane-how__number {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 58px;
+    height: 58px;
+
+    margin-bottom: 5rem;
+
+    border-radius: 50%;
+
+    background: {{ section.settings.accent_color }};
+    color: #ffffff;
+
+    font-size: 1.4rem;
+    font-weight: 700;
+  }
+
+
+  /* ICON */
+
+  #PurelaneHowItWorks-{{ section.id }} .purelane-how__icon {
+    margin-bottom: 1.5rem;
+
+    color: {{ section.settings.accent_color }};
+
+    font-size: 2.5rem;
+    font-weight: 700;
+  }
+
+
+  /* TITLE */
+
+  #PurelaneHowItWorks-{{ section.id }} .purelane-how__title {
+    margin: 0;
+
+    font-size: 2.3rem;
+    line-height: 1.15;
+    letter-spacing: -0.025em;
+
+    font-weight: 700;
+  }
+
+
+  /* TEXT */
+
+  #PurelaneHowItWorks-{{ section.id }} .purelane-how__text {
+    max-width: 390px;
+
+    margin-top: 1.5rem;
+
+    font-size: 1.5rem;
+    line-height: 1.6;
+
+    opacity: 0.7;
+  }
+
+
+  /* BUTTON */
+
+  #PurelaneHowItWorks-{{ section.id }} .purelane-how__action {
+    display: flex;
+    justify-content: center;
+
+    margin-top: 4rem;
+  }
+
+
+  #PurelaneHowItWorks-{{ section.id }} .purelane-how__button {
+    display: inline-flex;
+
+    align-items: center;
+    gap: 1rem;
+
+    padding: 1.4rem 2.3rem;
+
+    border-radius: 999px;
+
+    background: {{ section.settings.accent_color }};
+    color: #ffffff;
+
+    font-size: 1.4rem;
+    font-weight: 700;
+
+    text-decoration: none;
+
+    transition:
+      transform 180ms ease,
+      opacity 180ms ease;
+  }
+
+
+  #PurelaneHowItWorks-{{ section.id }} .purelane-how__button:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+  }
+
+
+  /* TABLET */
+
+  @media screen and (max-width: 989px) {
+
+    #PurelaneHowItWorks-{{ section.id }} .purelane-how__inner {
+      padding-top: 6rem;
+      padding-bottom: 6rem;
+    }
+
+    #PurelaneHowItWorks-{{ section.id }} .purelane-how__steps {
+      grid-template-columns: 1fr;
+    }
+
+    #PurelaneHowItWorks-{{ section.id }} .purelane-how__step {
+      min-height: auto;
+
+      border-right: 0;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.14);
+    }
+
+    #PurelaneHowItWorks-{{ section.id }} .purelane-how__step:last-child {
+      border-bottom: 0;
+    }
+
+  }
+
+
+  /* MOBILE */
+
+  @media screen and (max-width: 749px) {
+
+    #PurelaneHowItWorks-{{ section.id }} .purelane-how__inner {
+      padding-top: 5rem;
+      padding-bottom: 5rem;
+    }
+
+    #PurelaneHowItWorks-{{ section.id }} .purelane-how__header {
+      margin-bottom: 3rem;
+    }
+
+    #PurelaneHowItWorks-{{ section.id }} .purelane-how__description {
+      font-size: 1.5rem;
+    }
+
+    #PurelaneHowItWorks-{{ section.id }} .purelane-how__step {
+      padding: 3rem 2rem;
+    }
+
+    #PurelaneHowItWorks-{{ section.id }} .purelane-how__number {
+      margin-bottom: 3rem;
+    }
+
+  }
+
+</style>
+
+
+{% schema %}
+
+{
+  "name": "Purelane how it works",
+  "tag": "section",
+  "class": "section-purelane-how",
+
+  "settings": [
+
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "HOW IT WORKS"
+    },
+
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "A simpler routine. A cleaner home."
+    },
+
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Powerful everyday cleaning, designed to make your routine simpler and more intentional.</p>"
+    },
+
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Shop cleaning essentials"
+    },
+
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#F4F0E8"
+    },
+
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#171717"
+    },
+
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent",
+      "default": "#5B3CC4"
+    }
+
+  ],
+
+  "blocks": [
+
+    {
+      "type": "step",
+
+      "name": "Step",
+
+      "settings": [
+
+        {
+          "type": "text",
+          "id": "number",
+          "label": "Number",
+          "default": "01"
+        },
+
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Icon",
+          "default": "✦"
+        },
+
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Choose your formula"
+        },
+
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Description",
+          "default": "<p>Select the right cleaning solution for the job.</p>"
+        }
+
+      ]
+
+    }
+
+  ],
+
+  "presets": [
+
+    {
+      "name": "Purelane how it works",
+
+      "blocks": [
+
+        {
+          "type": "step",
+          "settings": {
+            "number": "01",
+            "icon": "✦",
+            "title": "Choose your formula",
+            "description": "<p>Select the right cleaning solution for the job.</p>"
+          }
+        },
+
+        {
+          "type": "step",
+          "settings": {
+            "number": "02",
+            "icon": "＋",
+            "title": "Dilute & use",
+            "description": "<p>Add the concentrate to your reusable bottle and fill with water.</p>"
+          }
+        },
+
+        {
+          "type": "step",
+          "settings": {
+            "number": "03",
+            "icon": "✓",
+            "title": "Clean without compromise",
+            "description": "<p>Powerful everyday cleaning without unnecessary harsh chemicals.</p>"
+          }
+        }
+
+      ]
+
+    }
+
+  ]
+
+}
+
+{% endschema %}

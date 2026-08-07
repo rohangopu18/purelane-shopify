@@ -1,0 +1,1162 @@
+<section
+  id="PurelaneHero-{{ section.id }}"
+  class="purelane-hero"
+>
+  <div class="purelane-hero__glow"></div>
+
+  <div class="purelane-hero__container">
+
+    <!-- HERO CONTENT -->
+    <div class="purelane-hero__content">
+
+      {% if section.settings.eyebrow != blank %}
+        <div class="purelane-hero__eyebrow">
+          <span></span>
+          {{ section.settings.eyebrow }}
+        </div>
+      {% endif %}
+
+      {% if section.settings.heading != blank %}
+        <h1 class="purelane-hero__heading">
+          {{ section.settings.heading }}
+        </h1>
+      {% endif %}
+
+      {% if section.settings.description != blank %}
+        <div class="purelane-hero__description">
+          {{ section.settings.description }}
+        </div>
+      {% endif %}
+
+      <div class="purelane-hero__actions">
+
+        {% if section.settings.primary_button_text != blank %}
+          <a
+            href="{{ section.settings.primary_button_link | default: routes.all_products_collection_url }}"
+            class="purelane-hero__button purelane-hero__button--primary"
+          >
+            {{ section.settings.primary_button_text }}
+            <span>→</span>
+          </a>
+        {% endif %}
+
+        {% if section.settings.secondary_button_text != blank %}
+          <a
+            href="{{ section.settings.secondary_button_link | default: '#' }}"
+            class="purelane-hero__button purelane-hero__button--secondary"
+          >
+            {{ section.settings.secondary_button_text }}
+          </a>
+        {% endif %}
+
+      </div>
+
+      <div class="purelane-hero__badges">
+
+        {% if section.settings.badge_1 != blank %}
+          <div class="purelane-hero__badge">
+            <span>♧</span>
+            {{ section.settings.badge_1 }}
+          </div>
+        {% endif %}
+
+        {% if section.settings.badge_2 != blank %}
+          <div class="purelane-hero__badge">
+            <span>✓</span>
+            {{ section.settings.badge_2 }}
+          </div>
+        {% endif %}
+
+        {% if section.settings.badge_3 != blank %}
+          <div class="purelane-hero__badge">
+            <span>◯</span>
+            {{ section.settings.badge_3 }}
+          </div>
+        {% endif %}
+
+      </div>
+
+    </div>
+
+
+    <!-- PRODUCT SLIDER -->
+    <div class="purelane-hero__visual">
+
+      <div class="purelane-hero__slider">
+
+        {% for block in section.blocks %}
+
+          {% assign product = block.settings.product %}
+
+          <div
+            class="purelane-slide {% if forloop.first %}is-active{% endif %}"
+            data-slide="{{ forloop.index0 }}"
+            {{ block.shopify_attributes }}
+          >
+
+            <div class="purelane-slide__product">
+
+              {% if block.settings.image != blank %}
+
+                {{
+                  block.settings.image
+                  | image_url: width: 1200
+                  | image_tag:
+                    loading: 'eager',
+                    class: 'purelane-slide__image',
+                    alt: block.settings.image.alt | default: block.settings.title
+                }}
+
+              {% elsif product != blank and product.featured_image != blank %}
+
+                {{
+                  product.featured_image
+                  | image_url: width: 1200
+                  | image_tag:
+                    loading: 'eager',
+                    class: 'purelane-slide__image',
+                    alt: product.title
+                }}
+
+              {% else %}
+
+                <div class="purelane-slide__placeholder">
+                  Product image
+                </div>
+
+              {% endif %}
+
+            </div>
+
+
+            <!-- PRICE CARD -->
+            <div class="purelane-slide__price-card">
+
+              {% if block.settings.label != blank %}
+                <div class="purelane-slide__label">
+                  {{ block.settings.label }}
+                </div>
+              {% endif %}
+
+              {% if product != blank %}
+
+                <div class="purelane-slide__price">
+
+                  {{ product.price | money }}
+
+                  {% if product.compare_at_price > product.price %}
+                    <del>
+                      {{ product.compare_at_price | money }}
+                    </del>
+                  {% endif %}
+
+                </div>
+
+                {% if product.compare_at_price > product.price %}
+                  {% assign discount = product.compare_at_price
+                    | minus: product.price
+                    | times: 100
+                    | divided_by: product.compare_at_price
+                  %}
+
+                  <div class="purelane-slide__discount">
+                    {{ discount }}% OFF
+                  </div>
+                {% endif %}
+
+              {% elsif block.settings.price != blank %}
+
+                <div class="purelane-slide__price">
+                  {{ block.settings.price }}
+                </div>
+
+              {% endif %}
+
+            </div>
+
+          </div>
+
+        {% endfor %}
+
+      </div>
+
+
+      <!-- SLIDER CONTROLS -->
+      {% if section.blocks.size > 1 %}
+
+        <div class="purelane-hero__controls">
+
+          <button
+            type="button"
+            class="purelane-hero__arrow"
+            data-hero-prev
+            aria-label="Previous product"
+          >
+            ←
+          </button>
+
+          <div class="purelane-hero__dots">
+
+            {% for block in section.blocks %}
+
+              <button
+                type="button"
+                class="purelane-hero__dot {% if forloop.first %}is-active{% endif %}"
+                data-hero-dot="{{ forloop.index0 }}"
+                aria-label="Show product {{ forloop.index }}"
+              ></button>
+
+            {% endfor %}
+
+          </div>
+
+          <button
+            type="button"
+            class="purelane-hero__arrow"
+            data-hero-next
+            aria-label="Next product"
+          >
+            →
+          </button>
+
+        </div>
+
+      {% endif %}
+
+    </div>
+
+  </div>
+</section>
+
+
+<style>
+
+#PurelaneHero-{{ section.id }} {
+
+  --purelane-bg: {{ section.settings.background_color }};
+  --purelane-text: {{ section.settings.text_color }};
+  --purelane-accent: {{ section.settings.accent_color }};
+
+  position: relative;
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 80% 40%,
+      rgba(115, 180, 150, 0.22),
+      transparent 35%
+    ),
+    var(--purelane-bg);
+
+  color: var(--purelane-text);
+
+}
+
+
+/* BACKGROUND */
+
+#PurelaneHero-{{ section.id }} .purelane-hero__glow {
+
+  position: absolute;
+
+  width: 650px;
+  height: 650px;
+
+  right: -180px;
+  top: 80px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(130, 100, 210, 0.18),
+      transparent 70%
+    );
+
+  pointer-events: none;
+
+}
+
+
+/* CONTAINER */
+
+#PurelaneHero-{{ section.id }} .purelane-hero__container {
+
+  position: relative;
+
+  z-index: 2;
+
+  max-width: 1450px;
+
+  min-height: 720px;
+
+  margin: 0 auto;
+
+  padding:
+    90px
+    40px
+    70px;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 0.95fr)
+    minmax(0, 1.05fr);
+
+  align-items: center;
+
+  gap: 50px;
+
+}
+
+
+/* CONTENT */
+
+#PurelaneHero-{{ section.id }} .purelane-hero__content {
+
+  max-width: 690px;
+
+}
+
+
+#PurelaneHero-{{ section.id }} .purelane-hero__eyebrow {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  margin-bottom: 22px;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.18em;
+
+  text-transform: uppercase;
+
+  color: var(--purelane-accent);
+
+}
+
+
+#PurelaneHero-{{ section.id }} .purelane-hero__eyebrow span {
+
+  width: 32px;
+  height: 2px;
+
+  background: var(--purelane-accent);
+
+}
+
+
+/* HEADING */
+
+#PurelaneHero-{{ section.id }} .purelane-hero__heading {
+
+  margin: 0;
+
+  max-width: 700px;
+
+  font-size: clamp(
+    5rem,
+    7vw,
+    8.5rem
+  );
+
+  line-height: 0.86;
+
+  letter-spacing: -0.07em;
+
+  font-weight: 800;
+
+  color: var(--purelane-text);
+
+}
+
+
+/* DESCRIPTION */
+
+#PurelaneHero-{{ section.id }} .purelane-hero__description {
+
+  max-width: 620px;
+
+  margin-top: 38px;
+
+  font-size: 19px;
+
+  line-height: 1.6;
+
+  opacity: 0.78;
+
+}
+
+
+/* BUTTONS */
+
+#PurelaneHero-{{ section.id }} .purelane-hero__actions {
+
+  display: flex;
+
+  gap: 14px;
+
+  flex-wrap: wrap;
+
+  margin-top: 34px;
+
+}
+
+
+#PurelaneHero-{{ section.id }} .purelane-hero__button {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 14px;
+
+  min-height: 56px;
+
+  padding: 0 27px;
+
+  border-radius: 999px;
+
+  font-size: 14px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.08em;
+
+  text-decoration: none;
+
+  transition:
+    transform .2s ease,
+    box-shadow .2s ease;
+
+}
+
+
+#PurelaneHero-{{ section.id }} .purelane-hero__button:hover {
+
+  transform: translateY(-3px);
+
+}
+
+
+#PurelaneHero-{{ section.id }} .purelane-hero__button--primary {
+
+  background: var(--purelane-accent);
+
+  color: white;
+
+  box-shadow:
+    0 10px 25px rgba(0,0,0,.12);
+
+}
+
+
+#PurelaneHero-{{ section.id }} .purelane-hero__button--secondary {
+
+  border: 1px solid rgba(0,0,0,.16);
+
+  color: var(--purelane-text);
+
+  background: rgba(255,255,255,.5);
+
+}
+
+
+/* BADGES */
+
+#PurelaneHero-{{ section.id }} .purelane-hero__badges {
+
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 10px;
+
+  margin-top: 30px;
+
+}
+
+
+#PurelaneHero-{{ section.id }} .purelane-hero__badge {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 10px 15px;
+
+  border: 1px solid rgba(0,0,0,.12);
+
+  border-radius: 999px;
+
+  background: rgba(255,255,255,.42);
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+}
+
+
+#PurelaneHero-{{ section.id }} .purelane-hero__badge span {
+
+  color: var(--purelane-accent);
+
+}
+
+
+/* VISUAL */
+
+#PurelaneHero-{{ section.id }} .purelane-hero__visual {
+
+  position: relative;
+
+  min-height: 600px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+}
+
+
+#PurelaneHero-{{ section.id }} .purelane-hero__slider {
+
+  position: relative;
+
+  width: 100%;
+
+  height: 580px;
+
+}
+
+
+/* SLIDES */
+
+#PurelaneHero-{{ section.id }} .purelane-slide {
+
+  position: absolute;
+
+  inset: 0;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  opacity: 0;
+
+  transform: translateX(40px) scale(.97);
+
+  pointer-events: none;
+
+  transition:
+    opacity .6s ease,
+    transform .6s ease;
+
+}
+
+
+#PurelaneHero-{{ section.id }} .purelane-slide.is-active {
+
+  opacity: 1;
+
+  transform: translateX(0) scale(1);
+
+  pointer-events: auto;
+
+}
+
+
+/* PRODUCT IMAGE */
+
+#PurelaneHero-{{ section.id }} .purelane-slide__product {
+
+  width: min(560px, 90%);
+
+  height: 500px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+}
+
+
+#PurelaneHero-{{ section.id }} .purelane-slide__image {
+
+  display: block;
+
+  width: 100%;
+
+  height: 100%;
+
+  object-fit: contain;
+
+  filter:
+    drop-shadow(
+      0 30px 35px rgba(0,0,0,.12)
+    );
+
+}
+
+
+/* PRICE CARD */
+
+#PurelaneHero-{{ section.id }} .purelane-slide__price-card {
+
+  position: absolute;
+
+  left: 5%;
+
+  bottom: 55px;
+
+  min-width: 145px;
+
+  padding: 17px;
+
+  border-radius: 22px;
+
+  background:
+    rgba(255,255,255,.82);
+
+  backdrop-filter: blur(14px);
+
+  box-shadow:
+    0 18px 45px rgba(0,0,0,.13);
+
+}
+
+
+#PurelaneHero-{{ section.id }} .purelane-slide__label {
+
+  margin-bottom: 6px;
+
+  font-size: 10px;
+
+  font-weight: 800;
+
+  letter-spacing: .16em;
+
+  text-transform: uppercase;
+
+  color: var(--purelane-accent);
+
+}
+
+
+#PurelaneHero-{{ section.id }} .purelane-slide__price {
+
+  font-size: 25px;
+
+  font-weight: 800;
+
+}
+
+
+#PurelaneHero-{{ section.id }} .purelane-slide__price del {
+
+  margin-left: 6px;
+
+  font-size: 12px;
+
+  opacity: .5;
+
+  font-weight: 500;
+
+}
+
+
+#PurelaneHero-{{ section.id }} .purelane-slide__discount {
+
+  display: inline-block;
+
+  margin-top: 9px;
+
+  padding: 5px 8px;
+
+  border-radius: 999px;
+
+  border: 1px solid rgba(100,120,50,.35);
+
+  font-size: 9px;
+
+  font-weight: 800;
+
+  color: #476321;
+
+}
+
+
+/* CONTROLS */
+
+#PurelaneHero-{{ section.id }} .purelane-hero__controls {
+
+  position: absolute;
+
+  bottom: 10px;
+
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 15px;
+
+}
+
+
+#PurelaneHero-{{ section.id }} .purelane-hero__dots {
+
+  display: flex;
+
+  gap: 8px;
+
+}
+
+
+#PurelaneHero-{{ section.id }} .purelane-hero__dot {
+
+  width: 9px;
+  height: 9px;
+
+  padding: 0;
+
+  border: 0;
+
+  border-radius: 50%;
+
+  background: rgba(0,0,0,.18);
+
+  cursor: pointer;
+
+  transition: .25s ease;
+
+}
+
+
+#PurelaneHero-{{ section.id }} .purelane-hero__dot.is-active {
+
+  width: 28px;
+
+  border-radius: 999px;
+
+  background: var(--purelane-accent);
+
+}
+
+
+#PurelaneHero-{{ section.id }} .purelane-hero__arrow {
+
+  border: 0;
+
+  background: transparent;
+
+  cursor: pointer;
+
+  font-size: 17px;
+
+}
+
+
+/* MOBILE */
+
+@media screen and (max-width: 989px) {
+
+  #PurelaneHero-{{ section.id }} .purelane-hero__container {
+
+    grid-template-columns: 1fr;
+
+    padding-top: 65px;
+
+  }
+
+  #PurelaneHero-{{ section.id }} .purelane-hero__heading {
+
+    font-size: clamp(
+      4.5rem,
+      13vw,
+      7rem
+    );
+
+  }
+
+  #PurelaneHero-{{ section.id }} .purelane-hero__visual {
+
+    min-height: 500px;
+
+  }
+
+}
+
+
+@media screen and (max-width: 749px) {
+
+  #PurelaneHero-{{ section.id }} .purelane-hero__container {
+
+    padding:
+      50px 20px 60px;
+
+  }
+
+  #PurelaneHero-{{ section.id }} .purelane-hero__heading {
+
+    font-size: 4.8rem;
+
+  }
+
+  #PurelaneHero-{{ section.id }} .purelane-hero__description {
+
+    font-size: 16px;
+
+  }
+
+  #PurelaneHero-{{ section.id }} .purelane-hero__slider {
+
+    height: 430px;
+
+  }
+
+  #PurelaneHero-{{ section.id }} .purelane-slide__product {
+
+    height: 380px;
+
+  }
+
+  #PurelaneHero-{{ section.id }} .purelane-slide__price-card {
+
+    left: 0;
+
+    bottom: 45px;
+
+  }
+
+}
+
+</style>
+
+
+<script>
+
+(function() {
+
+  const section = document.querySelector(
+    '#PurelaneHero-{{ section.id }}'
+  );
+
+  if (!section) return;
+
+  const slides = section.querySelectorAll(
+    '.purelane-slide'
+  );
+
+  const dots = section.querySelectorAll(
+    '.purelane-hero__dot'
+  );
+
+  const nextButton = section.querySelector(
+    '[data-hero-next]'
+  );
+
+  const prevButton = section.querySelector(
+    '[data-hero-prev]'
+  );
+
+  if (slides.length <= 1) return;
+
+  let current = 0;
+
+  let timer;
+
+
+  function showSlide(index) {
+
+    current =
+      (index + slides.length) %
+      slides.length;
+
+    slides.forEach(function(slide, i) {
+
+      slide.classList.toggle(
+        'is-active',
+        i === current
+      );
+
+    });
+
+    dots.forEach(function(dot, i) {
+
+      dot.classList.toggle(
+        'is-active',
+        i === current
+      );
+
+    });
+
+  }
+
+
+  function startAutoPlay() {
+
+    clearInterval(timer);
+
+    timer = setInterval(function() {
+
+      showSlide(current + 1);
+
+    }, 5000);
+
+  }
+
+
+  if (nextButton) {
+
+    nextButton.addEventListener(
+      'click',
+      function() {
+
+        showSlide(current + 1);
+
+        startAutoPlay();
+
+      }
+    );
+
+  }
+
+
+  if (prevButton) {
+
+    prevButton.addEventListener(
+      'click',
+      function() {
+
+        showSlide(current - 1);
+
+        startAutoPlay();
+
+      }
+    );
+
+  }
+
+
+  dots.forEach(function(dot) {
+
+    dot.addEventListener(
+      'click',
+      function() {
+
+        showSlide(
+          Number(
+            dot.dataset.heroDot
+          )
+        );
+
+        startAutoPlay();
+
+      }
+    );
+
+  });
+
+
+  showSlide(0);
+
+  startAutoPlay();
+
+})();
+
+</script>
+
+
+{% schema %}
+
+{
+  "name": "Purelane hero",
+
+  "tag": "section",
+
+  "class": "section-purelane-hero",
+
+  "settings": [
+
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "PLANT-POWERED HOMECARE"
+    },
+
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Clean that lasts"
+    },
+
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Powerful everyday cleaning made with thoughtful ingredients. Kind to your home, your family and the world outside it.</p>"
+    },
+
+    {
+      "type": "text",
+      "id": "primary_button_text",
+      "label": "Primary button",
+      "default": "Shop now"
+    },
+
+    {
+      "type": "url",
+      "id": "primary_button_link",
+      "label": "Primary button link"
+    },
+
+    {
+      "type": "text",
+      "id": "secondary_button_text",
+      "label": "Secondary button",
+      "default": "How it works"
+    },
+
+    {
+      "type": "url",
+      "id": "secondary_button_link",
+      "label": "Secondary button link"
+    },
+
+    {
+      "type": "text",
+      "id": "badge_1",
+      "label": "Badge 1",
+      "default": "Plant powered"
+    },
+
+    {
+      "type": "text",
+      "id": "badge_2",
+      "label": "Badge 2",
+      "default": "Safe for kids & pets"
+    },
+
+    {
+      "type": "text",
+      "id": "badge_3",
+      "label": "Badge 3",
+      "default": "Zero harsh chemicals"
+    },
+
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#F3F8F1"
+    },
+
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#17122D"
+    },
+
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent",
+      "default": "#5A3BB5"
+    }
+
+  ],
+
+  "blocks": [
+
+    {
+      "type": "product_slide",
+
+      "name": "Product slide",
+
+      "settings": [
+
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Product image"
+        },
+
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Price label",
+          "default": "Single bottle"
+        },
+
+        {
+          "type": "text",
+          "id": "price",
+          "label": "Custom price",
+          "default": "₹200"
+        }
+
+      ]
+
+    }
+
+  ],
+
+  "presets": [
+
+    {
+      "name": "Purelane hero",
+
+      "blocks": [
+
+        {
+          "type": "product_slide"
+        },
+
+        {
+          "type": "product_slide"
+        },
+
+        {
+          "type": "product_slide"
+        }
+
+      ]
+
+    }
+
+  ]
+
+}
+
+{% endschema %}
