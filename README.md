@@ -1,68 +1,96 @@
-# Purelane Shopify Theme
+# Purelane — Shopify Storefront
 
-## Overview
+Purelane is a modern Shopify storefront focused on presenting everyday home-care and personal-care products through a clean, premium, conversion-oriented shopping experience.
 
-Custom Shopify storefront developed for the Purelane product experience.
+The storefront is built on Shopify's Dawn theme and customized extensively using Shopify Liquid, JSON templates, reusable theme sections, CSS, and Shopify's native product and collection architecture.
 
-The project is built on Shopify's Dawn theme and extends it with custom Liquid sections, storefront layouts, product presentation, benefits, bundles, reviews, and shopping-focused experiences.
+---
 
-## Preview
+## Project Overview
 
-Shopify Preview:
-https://ruqxugz2i6gbhpsk-77871349925.shopifypreview.com/
+The goal of the project is to transform the standard Shopify storefront foundation into a dedicated Purelane shopping experience.
 
-## Custom Sections
+The homepage is structured around:
 
-- Purelane Hero
-- Benefits
-- How It Works
-- Products
-- Shop
-- Bestselling Combos
-- Bundles
-- Reviews Rail
+- Brand introduction
+- Product benefits
+- How the products work
+- Product discovery
+- Bestselling combinations
+- Product bundles
+- Customer reviews
+- Shopping and product exploration
 
-## Technologies
+The implementation uses Shopify's native theme architecture so the storefront remains maintainable and editable through Shopify's theme system.
 
-- Shopify Liquid
-- Shopify Theme Architecture
-- Shopify CLI
-- JSON Templates
-- HTML
-- CSS
-- Git
-- GitHub
+---
 
-## Development
+## Features
 
-The theme was developed locally using Shopify CLI and tested using Shopify's development theme preview.
+### Hero Section
 
-The final implementation was pushed to an unpublished Shopify theme for review.
+A dedicated Purelane hero experience designed to immediately communicate the brand and guide customers toward the shopping experience.
 
-## AI-Assisted Workflow
+### Product Benefits
 
-AI tools were used during development to help with implementation ideas, Liquid development, debugging, copy refinement, and iterative improvements.
+A structured benefits section highlighting key reasons to choose Purelane products.
 
-Generated code was reviewed, tested, and integrated into the final Shopify theme.
+### How It Works
 
-## What I Would Improve With More Time
+A visual step-by-step section explaining the Purelane product experience in a simple and easy-to-understand format.
 
-- Further responsive optimization
-- Accessibility improvements
-- Performance and image optimization
-- More product merchandising interactions
-- Additional theme-editor customization
-- More extensive cross-browser testing
-- Further Lighthouse optimization
+### Product Showcase
 
-## Project Structure
+A dedicated product presentation area for displaying Purelane products with a consistent visual hierarchy.
 
-The project follows Shopify's standard theme structure:
+### Shop Experience
 
-- assets
-- config
-- layout
-- locales
-- sections
-- snippets
-- templates
+A focused shopping section designed to make product discovery easier and provide clear paths toward individual products.
+
+### Bestselling Combos
+
+A merchandising section highlighting combinations of products that can be purchased together.
+
+### Product Bundles
+
+A dedicated bundle section for presenting grouped products and encouraging customers to explore multiple-product purchases.
+
+### Customer Reviews
+
+A horizontally moving reviews rail presenting customer feedback in a compact, interactive layout.
+
+---
+
+## Products
+
+The storefront contains a curated range of Purelane products covering home-care and personal-care categories.
+
+Examples include:
+
+- Laundry detergent
+- Dish wash
+- Bathroom cleaner
+- Floor cleaner
+- Kitchen cleaner
+- Glass cleaner
+- Face wash
+- Face cream
+
+Product presentation is designed to maintain a consistent visual identity throughout the storefront.
+
+---
+
+## Theme Architecture
+
+The project follows Shopify's standard theme architecture:
+
+```text
+purelane-shopify/
+│
+├── assets/
+├── config/
+├── layout/
+├── locales/
+├── sections/
+├── snippets/
+└── templates/
