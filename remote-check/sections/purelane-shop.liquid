@@ -1,0 +1,473 @@
+<section
+  id="shop"
+  class="purelane-shop"
+>
+  <div class="purelane-shop__container">
+
+    <div class="purelane-shop__header">
+      <div>
+        {% if section.settings.eyebrow != blank %}
+          <p class="purelane-shop__eyebrow">
+            {{ section.settings.eyebrow | escape }}
+          </p>
+        {% endif %}
+
+        <h2 class="purelane-shop__heading">
+          {{ section.settings.heading }}
+        </h2>
+      </div>
+
+      {% if section.settings.description != blank %}
+        <div class="purelane-shop__description">
+          {{ section.settings.description }}
+        </div>
+      {% endif %}
+    </div>
+
+    {% assign shop_collection = section.settings.collection %}
+
+    {% if shop_collection != blank and shop_collection.products_count > 0 %}
+
+      <div class="purelane-shop__grid">
+
+        {% for product in shop_collection.products limit: section.settings.products_to_show %}
+
+          <article class="purelane-product">
+
+            <a
+              href="{{ product.url }}"
+              class="purelane-product__image-link"
+              aria-label="{{ product.title | escape }}"
+            >
+
+              <div class="purelane-product__image-wrap">
+
+                {% if product.featured_image != blank %}
+
+                  {{
+                    product.featured_image
+                    | image_url: width: 900
+                    | image_tag:
+                      loading: 'lazy',
+                      widths: '300, 500, 700, 900',
+                      sizes: '(min-width: 990px) 25vw, 50vw',
+                      class: 'purelane-product__image',
+                      alt: product.featured_image.alt | default: product.title
+                  }}
+
+                {% else %}
+
+                  {{ 'product-1' | placeholder_svg_tag: 'purelane-product__placeholder' }}
+
+                {% endif %}
+
+                {% if product.compare_at_price > product.price %}
+                  <span class="purelane-product__badge">
+                    Sale
+                  </span>
+                {% endif %}
+
+              </div>
+
+            </a>
+
+            <div class="purelane-product__info">
+
+              {% if section.settings.show_vendor and product.vendor != blank %}
+                <p class="purelane-product__vendor">
+                  {{ product.vendor }}
+                </p>
+              {% endif %}
+
+              <h3 class="purelane-product__title">
+                <a href="{{ product.url }}">
+                  {{ product.title }}
+                </a>
+              </h3>
+
+              <div class="purelane-product__price">
+
+                {% if product.compare_at_price > product.price %}
+                  <span class="purelane-product__price-current">
+                    {{ product.price | money }}
+                  </span>
+
+                  <s class="purelane-product__price-old">
+                    {{ product.compare_at_price | money }}
+                  </s>
+                {% else %}
+                  <span class="purelane-product__price-current">
+                    {{ product.price | money }}
+                  </span>
+                {% endif %}
+
+              </div>
+
+              {% if product.available %}
+                <form method="post" action="{{ routes.cart_add_url }}">
+                  <input
+                    type="hidden"
+                    name="id"
+                    value="{{ product.selected_or_first_available_variant.id }}"
+                  >
+
+                  <button
+                    type="submit"
+                    class="purelane-product__button"
+                  >
+                    Add to cart
+                    <span aria-hidden="true">→</span>
+                  </button>
+                </form>
+              {% else %}
+                <button
+                  class="purelane-product__button purelane-product__button--disabled"
+                  disabled
+                >
+                  Sold out
+                </button>
+              {% endif %}
+
+            </div>
+
+          </article>
+
+        {% endfor %}
+
+      </div>
+
+    {% else %}
+
+      <div class="purelane-shop__empty">
+        <p>Select a product collection in the Theme Editor.</p>
+      </div>
+
+    {% endif %}
+
+    {% if section.settings.show_view_all and shop_collection != blank %}
+      <div class="purelane-shop__footer">
+        <a
+          href="{{ shop_collection.url }}"
+          class="purelane-shop__view-all"
+        >
+          View all products
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    {% endif %}
+
+  </div>
+</section>
+
+<style>
+  #shop {
+    background: {{ section.settings.background_color }};
+    color: {{ section.settings.text_color }};
+  }
+
+  #shop .purelane-shop__container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 90px 24px;
+  }
+
+  #shop .purelane-shop__header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 40px;
+    margin-bottom: 55px;
+  }
+
+  #shop .purelane-shop__eyebrow {
+    margin: 0 0 14px;
+    color: {{ section.settings.accent_color }};
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  #shop .purelane-shop__heading {
+    margin: 0;
+    font-size: clamp(3rem, 5vw, 5.5rem);
+    line-height: 0.95;
+    letter-spacing: -0.05em;
+  }
+
+  #shop .purelane-shop__description {
+    max-width: 430px;
+    font-size: 16px;
+    line-height: 1.6;
+    opacity: 0.65;
+  }
+
+  #shop .purelane-shop__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 28px;
+  }
+
+  #shop .purelane-product {
+    min-width: 0;
+  }
+
+  #shop .purelane-product__image-link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  #shop .purelane-product__image-wrap {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 1 / 1;
+    border-radius: 22px;
+    background: #f3f1ed;
+  }
+
+  #shop .purelane-product__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 350ms ease;
+  }
+
+  #shop .purelane-product:hover .purelane-product__image {
+    transform: scale(1.035);
+  }
+
+  #shop .purelane-product__placeholder {
+    width: 100%;
+    height: 100%;
+    opacity: 0.3;
+  }
+
+  #shop .purelane-product__badge {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    padding: 7px 12px;
+    border-radius: 999px;
+    background: {{ section.settings.accent_color }};
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  #shop .purelane-product__info {
+    padding: 20px 4px 0;
+  }
+
+  #shop .purelane-product__vendor {
+    margin: 0 0 6px;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.5;
+  }
+
+  #shop .purelane-product__title {
+    margin: 0;
+    font-size: 17px;
+    line-height: 1.35;
+    font-weight: 700;
+  }
+
+  #shop .purelane-product__title a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  #shop .purelane-product__price {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+  }
+
+  #shop .purelane-product__price-current {
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  #shop .purelane-product__price-old {
+    font-size: 13px;
+    opacity: 0.45;
+  }
+
+  #shop .purelane-product__button {
+    width: 100%;
+    margin-top: 16px;
+    padding: 13px 18px;
+    border: 1px solid {{ section.settings.accent_color }};
+    border-radius: 999px;
+    background: transparent;
+    color: {{ section.settings.accent_color }};
+    font: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition:
+      background 180ms ease,
+      color 180ms ease,
+      transform 180ms ease;
+  }
+
+  #shop .purelane-product__button:hover {
+    background: {{ section.settings.accent_color }};
+    color: #fff;
+    transform: translateY(-2px);
+  }
+
+  #shop .purelane-product__button--disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  #shop .purelane-shop__footer {
+    display: flex;
+    justify-content: center;
+    margin-top: 55px;
+  }
+
+  #shop .purelane-shop__view-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 24px;
+    border-radius: 999px;
+    background: {{ section.settings.accent_color }};
+    color: #fff;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  #shop .purelane-shop__empty {
+    padding: 60px;
+    text-align: center;
+    border: 1px dashed rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+  }
+
+  @media screen and (max-width: 989px) {
+    #shop .purelane-shop__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    #shop .purelane-shop__header {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+  }
+
+  @media screen and (max-width: 600px) {
+    #shop .purelane-shop__container {
+      padding: 65px 18px;
+    }
+
+    #shop .purelane-shop__grid {
+      gap: 18px;
+    }
+
+    #shop .purelane-product__image-wrap {
+      border-radius: 15px;
+    }
+
+    #shop .purelane-product__info {
+      padding-top: 14px;
+    }
+
+    #shop .purelane-product__title {
+      font-size: 14px;
+    }
+
+    #shop .purelane-product__button {
+      padding: 11px;
+      font-size: 12px;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Purelane shop",
+  "tag": "section",
+  "class": "section-purelane-shop",
+
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "SHOP PURELANE"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Everyday cleaning, made better."
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Simple, effective essentials designed for cleaner homes and better everyday routines.</p>"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Product collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Products to show",
+      "min": 4,
+      "max": 12,
+      "step": 4,
+      "default": 8
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show vendor",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show View all button",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#171717"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent",
+      "default": "#5B3CC4"
+    }
+  ],
+
+  "presets": [
+    {
+      "name": "Purelane shop"
+    }
+  ]
+}
+{% endschema %}
